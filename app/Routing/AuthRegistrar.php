@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Domain\Auth\Routing;
+namespace App\Routing;
 
 use App\Contracts\RouteRegistrar;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -25,7 +25,7 @@ final class AuthRegistrar implements RouteRegistrar
                 Route::post('/login', 'handle')
                     ->middleware('throttle:auth')
                     ->name('login.handle');
-                Route::delete('/logout', 'logOut')->name('logOut');
+                Route::delete('/logout', 'logOut')->name('logout');
             });
 
             Route::controller(SignUpController::class)->group(function () {
