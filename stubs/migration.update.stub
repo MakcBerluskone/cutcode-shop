@@ -8,13 +8,17 @@ return new class extends Migration
 {
     public function up(): void
     {
-        //
+        Schema::table('{{ table }}', function (Blueprint $table) {
+            //
+        });
     }
 
-    public function down(): void
+    public function down()
     {
         if(app()->isLocal()){
-            //
+            Schema::table('{{ table }}', function (Blueprint $table) {
+                //
+            });
         }
     }
 };
