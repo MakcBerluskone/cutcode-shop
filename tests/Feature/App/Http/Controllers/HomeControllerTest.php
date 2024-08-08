@@ -57,8 +57,5 @@ class HomeControllerTest extends TestCase
             ->assertViewHas('categories.0', $category)
             ->assertViewHas('products.0', $product)
             ->assertViewHas('brands.0', $brand);
-
-        Storage::disk('local')->deleteDirectory('images');
     }
-
 }

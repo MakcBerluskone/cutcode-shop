@@ -3,6 +3,7 @@
 namespace Domain\Catalog\Models;
 
 use App\Models\Product;
+use Domain\Catalog\Collections\BrandCollection;
 use Domain\Catalog\QueryBuilders\BrandQueryBuilder;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,6 +32,11 @@ class Brand extends Model
     protected function thumbnailDir(): string
     {
         return 'brands';
+    }
+
+    public function newCollection(array $models = []): BrandCollection
+    {
+        return new BrandCollection($models);
     }
 
     public function newEloquentBuilder($query): BrandQueryBuilder
