@@ -8,10 +8,9 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->text('text')
-                ->nullable();
-
-            $table->fullText(['title', 'text']);
+            $table->json('json_properties')
+                ->nullable()
+                ->after('brand_id');
         });
     }
 
@@ -19,7 +18,7 @@ return new class extends Migration {
     {
         if (app()->isLocal()) {
             Schema::table('products', function (Blueprint $table) {
-                //
+                $table->dropColumn('json_properties');
             });
         }
     }
