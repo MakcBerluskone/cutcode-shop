@@ -14,7 +14,7 @@
             <div class="mb-3 text-sm font-semibold">{{ $item->price }}</div>
             <div class="flex flex-wrap items-center gap-4">
 
-                <form method="POST" action="{{ route('cart.add', $item) }}" class="space-y-8 mt-8">
+                <form method="POST" action="{{ route('cart.add', $item) }}">
                     @csrf
                     <button type="submit" class="w-[56px] !h-[56px] !px-0 btn btn-pink">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 52 52">

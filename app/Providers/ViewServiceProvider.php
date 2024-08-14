@@ -18,6 +18,9 @@ class ViewServiceProvider extends ServiceProvider
     {
         Vite::macro('image', fn($asset) => $this->asset("resources/images/$asset"));
 
-        View::composer('*', NavigationComposer::class);
+        View::composer(
+            'layouts.*',
+            NavigationComposer::class
+        );
     }
 }

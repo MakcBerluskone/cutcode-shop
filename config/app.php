@@ -193,6 +193,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\MoonShineServiceProvider::class,
         App\Providers\TelescopeServiceProvider::class,
 
         App\Providers\ViewServiceProvider::class,
