@@ -59,7 +59,7 @@
                                     name="customer[email]"
                                     type="email"
                                     placeholder="E-mail"
-                                    value="{{ old('customer.email') }}"
+                                    value="{{ auth()->user()?->email ?? old('customer.email') }}"
                                     :isError="$errors->has('customer.email')"
                             >
                             </x-forms.text-input>
