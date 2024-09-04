@@ -4,6 +4,7 @@ namespace App\View\ViewModels;
 
 use Domain\Catalog\Models\Category;
 use Domain\Product\Models\Product;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Spatie\ViewModels\ViewModel;
@@ -27,9 +28,13 @@ class CatalogViewModel extends ViewModel
     public function products(): LengthAwarePaginator
     {
         return Product::query()
-            ->select('id', 'title', 'slug', 'price', 'thumbnail', 'json_properties')
+            ->select('id', 'title', 'slug', 'price', 'thumbnail')
             ->search()
             ->withCategory($this->category)
+            ->when(
+                request()->get('view') === 'list',
+                fn(Builder $query) => $query->withProperties()
+            )
             ->filtered()
             ->sorted()
             ->paginate(6);

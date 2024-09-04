@@ -45,10 +45,10 @@ class Product extends Model
     {
         parent::boot();
 
-        static::created(function (Product $product) {
-            ProductJsonProperties::dispatch($product)
-                ->delay(now()->addSeconds(10));
-        });
+//        static::created(function (Product $product) {
+//            ProductJsonProperties::dispatch($product)
+//                ->delay(now()->addSeconds(10));
+//        });
     }
 
     protected function thumbnailDir(): string

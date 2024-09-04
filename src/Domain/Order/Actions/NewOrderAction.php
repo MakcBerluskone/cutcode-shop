@@ -29,6 +29,7 @@ class NewOrderAction
         return Order::query()->create([
             'payment_method_id' => $orderDTO->payment_method_id,
             'delivery_type_id' => $orderDTO->delivery_type_id,
+            'user_id' => auth()->id(),
         ]);
     }
 }

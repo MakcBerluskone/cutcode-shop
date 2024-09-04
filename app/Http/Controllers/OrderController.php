@@ -37,15 +37,17 @@ class OrderController extends Controller
 
     public function handle(OrderFormRequest $request, NewOrderAction $action): RedirectResponse
     {
+        $orderCustomerDTO = OrderCustomerDTO::fromArray($request->get('customer'));
+
         $order = $action(
             OrderDTO::make(...$request->only('payment_method_id', 'delivery_type_id', 'password')),
-            OrderCustomerDTO::fromArray($request->get('customer')),
+            $orderCustomerDTO,
             $request->boolean('create_account')
         );
 
         (new OrderProcess($order))->processes([
             new CheckProductQuantities(),
-            new AssignCustomer(request('customer')),
+            new AssignCustomer($orderCustomerDTO),
             new AssignProducts(),
             new ChangeStateToPending(),
             new DecreaseProductsQuantities(),

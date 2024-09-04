@@ -44,4 +44,8 @@ class ProductQueryBuilder extends Builder
         });
     }
 
+    public function withProperties(): ProductQueryBuilder
+    {
+        return $this->with('properties');
+    }
 }
