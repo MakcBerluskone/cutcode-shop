@@ -23,6 +23,6 @@ final class FakerImageProvider extends Base
             false
         );
 
-        return '/storage/images/' . trim($storageDir, '/') . '/' . $filename;
+        return 'images/' . trim($storageDir, '/') . '/' . $filename;
     }
 }
