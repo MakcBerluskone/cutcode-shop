@@ -24,7 +24,7 @@ class Transaction
         try {
             DB::beginTransaction();
 
-            return tap($callback, function ($result) use ($finished) {
+            return tap($callback(), function ($result) use ($finished) {
                 if (!is_null($finished)) {
                     $finished($result);
                 }
