@@ -25,7 +25,7 @@ class ProductResource extends ModelResource
 {
     protected string $model = Product::class;
 
-    protected string $title = 'Products';
+    protected string $title = 'Продукция';
 
     protected array $with = [
         'brand',

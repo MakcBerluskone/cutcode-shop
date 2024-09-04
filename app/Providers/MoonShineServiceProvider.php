@@ -7,6 +7,7 @@ namespace App\Providers;
 use App\MoonShine\Resources\BrandResource;
 use App\MoonShine\Resources\CategoryResource;
 use App\MoonShine\Resources\OptionResource;
+use App\MoonShine\Resources\OrderResource;
 use App\MoonShine\Resources\ProductResource;
 use App\MoonShine\Resources\PropertyResource;
 use MoonShine\Providers\MoonShineApplicationServiceProvider;
@@ -44,28 +45,58 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
     protected function menu(): array
     {
         return [
-            MenuGroup::make(static fn() => __('moonshine::ui.resource.system'), [
-                MenuItem::make(
-                    static fn() => __('moonshine::ui.resource.admins_title'),
-                    new MoonShineUserResource()
-                ),
-                MenuItem::make(
-                    static fn() => __('moonshine::ui.resource.role_title'),
-                    new MoonShineUserRoleResource()
-                ),
-            ]),
+            MenuItem::make(
+                'Заказы',
+                new OrderResource(),
+                'heroicons.gift'
+            ),
 
-            MenuGroup::make('Products', [
-                MenuItem::make('Products', new ProductResource()),
-                MenuItem::make('Brands', new BrandResource()),
-                MenuItem::make('Categories', new CategoryResource()),
-                MenuItem::make('Properties', new PropertyResource()),
-                MenuItem::make('Options', new OptionResource()),
-            ]),
+            MenuGroup::make(
+                'Продукция',
+                [
+                    MenuItem::make(
+                        'Товары',
+                        new ProductResource(),
+                        'heroicons.gift'
+                    ),
+                    MenuItem::make(
+                        'Бренды',
+                        new BrandResource(),
+                        'heroicons.outline.users'
+                    ),
+                    MenuItem::make(
+                        'Категории',
+                        new CategoryResource(),
+                        'heroicons.outline.rectangle-group'
+                    ),
+                    MenuItem::make(
+                        'Свойства',
+                        new PropertyResource(),
+                        'heroicons.outline.users'
+                    ),
+                    MenuItem::make(
+                        'Опции',
+                        new OptionResource(),
+                        'heroicons.outline.users'
+                    ),
+                ],
+                'heroicons.home'
+            ),
 
-            MenuItem::make('Documentation', 'https://moonshine-laravel.com/docs')
-                ->badge(fn() => 'Check')
-                ->blank(),
+            MenuGroup::make(
+                static fn() => __('moonshine::ui.resource.system'),
+                [
+                    MenuItem::make(
+                        static fn() => __('moonshine::ui.resource.admins_title'),
+                        new MoonShineUserResource()
+                    ),
+//                    MenuItem::make(
+//                        static fn() => __('moonshine::ui.resource.role_title'),
+//                        new MoonShineUserRoleResource()
+//                    ),
+                ],
+                'heroicons.outline.tv'
+            ),
         ];
     }
 

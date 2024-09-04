@@ -25,7 +25,7 @@ class BrandResource extends ModelResource
 {
     protected string $model = Brand::class;
 
-    protected string $title = 'Brands';
+    protected string $title = 'Бренды';
 
     public string $column = 'title';
 

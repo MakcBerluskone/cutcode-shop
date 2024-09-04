@@ -21,7 +21,7 @@ class PropertyResource extends ModelResource
 {
     protected string $model = Property::class;
 
-    protected string $title = 'Properties';
+    protected string $title = 'Свойства';
 
     public string $column = 'title';
 

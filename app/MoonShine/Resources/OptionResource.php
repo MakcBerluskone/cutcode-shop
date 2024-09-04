@@ -21,7 +21,7 @@ class OptionResource extends ModelResource
 {
     protected string $model = Option::class;
 
-    protected string $title = 'Options';
+    protected string $title = 'Опции';
 
     /**
      * @return list<MoonShineComponent|Field>
