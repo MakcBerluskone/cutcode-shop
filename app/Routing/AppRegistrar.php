@@ -6,6 +6,7 @@ namespace App\Routing;
 
 use App\Contracts\RouteRegistrar;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ThumbnailController;
 use Illuminate\Contracts\Routing\Registrar;
 use Illuminate\Support\Facades\Route;
@@ -17,6 +18,16 @@ final class AppRegistrar implements RouteRegistrar
     {
         Route::middleware('web')->group(function () {
             Route::get('/', HomeController::class)->name('home');
+
+            Route::controller(ProfileController::class)
+                ->middleware('auth')
+                ->group(function () {
+                    Route::get('/profile', 'edit')
+                        ->name('profile.edit');
+
+                    Route::put('/profile', 'update')
+                        ->name('profile.update');
+            });
 
             Route::get('/storage/images/{dir}/{method}/{size}/{file}', ThumbnailController::class)
                 ->where('method', 'resize|crop|fit')

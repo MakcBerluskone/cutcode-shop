@@ -70,7 +70,7 @@
                                     <li><a href="#"
                                            class="text-body hover:text-white text-xs font-medium">Мои
                                             заказы</a></li>
-                                    <li><a href="#"
+                                    <li><a href="{{ route('profile.edit') }}"
                                            class="text-body hover:text-white text-xs font-medium">Редактировать
                                             профиль</a></li>
                                 </ul>
