@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\RequestFactories;
+namespace Tests\RequestFactories\Auth;
 
 use Worksome\RequestFactories\RequestFactory;
 
