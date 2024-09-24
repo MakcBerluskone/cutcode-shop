@@ -4,6 +4,7 @@ namespace Domain\Order\Models;
 
 use Domain\Auth\Models\User;
 use Domain\Order\Enums\OrderStatuses;
+use Domain\Order\QueryBuilders\OrderQueryBuilder;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -36,6 +37,11 @@ class Order extends Model
         'status' => 'new'
     ];
 
+    public function newEloquentBuilder($query): OrderQueryBuilder
+    {
+        return new OrderQueryBuilder($query);
+    }
+
     public function status(): Attribute
     {
         return Attribute::make(
@@ -63,7 +69,7 @@ class Order extends Model
         return $this->hasOne(OrderCustomer::class);
     }
 
-    public function orderItems(): HasMany
+    public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
     }

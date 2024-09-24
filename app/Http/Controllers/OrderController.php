@@ -7,6 +7,7 @@ use Domain\Order\Actions\NewOrderAction;
 use Domain\Order\DTOs\OrderCustomerDTO;
 use Domain\Order\DTOs\OrderDTO;
 use Domain\Order\Models\DeliveryType;
+use Domain\Order\Models\Order;
 use Domain\Order\Models\PaymentMethod;
 use Domain\Order\Processes\AssignCustomer;
 use Domain\Order\Processes\AssignProducts;
@@ -22,13 +23,29 @@ class OrderController extends Controller
 {
     public function index()
     {
+        $orders = Order::query()->user()->get();
+
+        return view('order.index', [
+            'orders' => $orders,
+        ]);
+    }
+
+    public function show(Order $order)
+    {
+        return view('order.show', [
+            'order' => $order->load('items.product'),
+        ]);
+    }
+
+    public function create()
+    {
         $items = cart()->items();
 
         if ($items->isEmpty()) {
             throw new DomainException('Корзина пуста');
         }
 
-        return view('order.index', [
+        return view('order.create', [
             'items' => $items,
             'payments' => PaymentMethod::query()->get(),
             'deliveries' => DeliveryType::query()->get(),

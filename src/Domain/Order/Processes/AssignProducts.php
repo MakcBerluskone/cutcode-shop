@@ -9,7 +9,7 @@ class AssignProducts implements OrderProcessContract
 {
     public function handle(Order $order, $next)
     {
-        $order->orderItems()
+        $order->items()
             ->createMany(
                 cart()->items()->map(function ($item) {
                     return [

@@ -9,275 +9,126 @@
             <!-- Breadcrumbs -->
             <ul class="breadcrumbs flex flex-wrap gap-y-1 gap-x-4 mb-6">
                 <li><a href="{{ route('home') }}" class="text-body hover:text-pink text-xs">Главная</a></li>
-                <li><a href="{{ route('cart') }}" class="text-body hover:text-pink text-xs">Корзина покупок</a></li>
-                <li><span class="text-body text-xs">Оформление заказа</span></li>
+                <li><span class="text-body text-xs">Мои заказы</span></li>
             </ul>
 
             <section>
                 <!-- Section heading -->
-                <h1 class="mb-8 text-lg lg:text-[42px] font-black">Оформление заказа</h1>
+                <h1 class="mb-8 text-lg lg:text-[42px] font-black">Мои заказы</h1>
 
-                <form action="{{ route('order.handle') }}" method="POST" class="grid xl:grid-cols-3 items-start gap-6 2xl:gap-8 mt-12">
-                    @csrf
+                <!-- Orders list -->
+                <div class="w-full space-y-4 text-white text-sm text-left">
 
-                    <!-- Contact information -->
-                    <div class="p-6 2xl:p-8 rounded-[20px] bg-card">
-                        <h3 class="mb-6 text-md 2xl:text-lg font-bold">Контактная информация</h3>
-                        <div class="space-y-3">
-
-                            <x-forms.text-input
-                                    name="customer[first_name]"
-                                    type="text"
-                                    placeholder="Имя"
-                                    value="{{ old('customer.first_name') }}"
-                                    :isError="$errors->has('customer.first_name')"
-                            >
-                            </x-forms.text-input>
-
-                            @error('customer.first_name')
-                            <x-forms.error>
-                                {{ $message }}
-                            </x-forms.error>
-                            @enderror
-
-                            <x-forms.text-input
-                                    name="customer[last_name]"
-                                    type="text"
-                                    placeholder="Фамилия"
-                                    value="{{ old('customer.last_name') }}"
-                                    :isError="$errors->has('customer.last_name')"
-                            >
-                            </x-forms.text-input>
-
-                            @error('customer.last_name')
-                            <x-forms.error>
-                                {{ $message }}
-                            </x-forms.error>
-                            @enderror
-
-                            <x-forms.text-input
-                                    name="customer[email]"
-                                    type="email"
-                                    placeholder="E-mail"
-                                    value="{{ auth()->user()?->email ?? old('customer.email') }}"
-                                    :isError="$errors->has('customer.email')"
-                            >
-                            </x-forms.text-input>
-
-                            @error('customer.email')
-                            <x-forms.error>
-                                {{ $message }}
-                            </x-forms.error>
-                            @enderror
-
-                            <x-forms.text-input
-                                    name="customer[phone]"
-                                    type="text"
-                                    placeholder="Телефон"
-                                    value="{{ old('customer.phone') }}"
-                                    :isError="$errors->has('customer.phone')"
-                            >
-                            </x-forms.text-input>
-
-                            @error('customer.phone')
-                            <x-forms.error>
-                                {{ $message }}
-                            </x-forms.error>
-                            @enderror
-
-
-                            @guest
-                                <div x-data="{ createAccount: false }">
-                                    <div class="py-3 text-body">Вы можете создать аккаунт после оформления заказа</div>
-                                    <div class="form-checkbox">
-                                        <input name="create_account"
-                                               type="checkbox"
-                                               id="checkout-create-account"
-                                               value="1"
-                                                @checked(old('create_account'))
-                                        >
-                                        <label for="checkout-create-account" class="form-checkbox-label" @click="createAccount = ! createAccount">Зарегистрировать аккаунт</label>
+                    <!-- Order item -->
+                    @forelse($orders as $order)
+                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between px-4 md:px-6 rounded-xl md:rounded-2xl bg-card">
+                            <div class="py-4">
+                                <div class="flex gap-6">
+                                    <div class="shrink-0 overflow-hidden w-[64px] sm:w-[84px] h-[64px] sm:h-[84px] rounded-2xl">
+                                        <img src="../../images/products/1.jpg" class="object-cover w-full h-full"
+                                             alt="Заказ №{{ $order->id }}">
                                     </div>
-                                    <div
-                                            x-show="createAccount"
-                                            x-transition:enter="ease-out duration-300"
-                                            x-transition:enter-start="opacity-0"
-                                            x-transition:enter-end="opacity-100"
-                                            x-transition:leave="ease-in duration-150"
-                                            x-transition:leave-start="opacity-100"
-                                            x-transition:leave-end="opacity-0"
-                                            class="mt-4 space-y-3"
-                                    >
-
-                                        <x-forms.text-input
-                                                name="password"
-                                                type="password"
-                                                placeholder="Пароль"
-                                                :isError="$errors->has('password')">
-                                        </x-forms.text-input>
-
-                                        @error('password')
-                                        <x-forms.error>
-                                            {{ $message }}
-                                        </x-forms.error>
-                                        @enderror
-
-                                        <x-forms.text-input
-                                                name="password_confirmation"
-                                                type="password"
-                                                placeholder="Повторите пароль"
-                                                :isError="$errors->has('password_confirmation')">
-                                        </x-forms.text-input>
-
-                                        @error('password_confirmation')
-                                        <x-forms.error>
-                                            {{ $message }}
-                                        </x-forms.error>
-                                        @enderror
-
+                                    <div class="grow py-2">
+                                        <div class="flex flex-col md:flex-row md:items-center gap-2">
+                                            <h4 class="pr-3 text-md font-bold"><a href="{{ route('orders.show', $order->id) }}"
+                                                                                  class="inline-block text-white hover:text-pink">Заказ
+                                                    №{{ $order->id }}</a></h4>
+                                            <div class="px-3 py-1 rounded-md bg-purple text-xxs">{{ $order->status->humanValue() }}</div>
+                                            <div class="px-3 py-1 rounded-md bg-white/10 text-xxs">{{ $order->created_at->format('d.m.Y') }}</div>
+                                        </div>
+                                        <div class="mt-3 text-body text-xs">На сумму: {{ $order->amount }}</div>
                                     </div>
                                 </div>
-                            @endguest
-                        </div>
-                    </div>
-
-                    <!-- Shipping & Payment -->
-                    <div class="space-y-6 2xl:space-y-8">
-
-                        <!-- Shipping-->
-                        <div class="p-6 2xl:p-8 rounded-[20px] bg-card">
-                            <h3 class="mb-6 text-md 2xl:text-lg font-bold">Способ доставки</h3>
-                            <div class="space-y-5">
-                                @foreach($deliveries as $delivery)
-                                    <div class="space-y-3">
-                                        <div class="form-radio">
-                                            <input type="radio"
-                                                   name="delivery_type_id"
-                                                   id="delivery-method-address-{{ $delivery->id }}"
-                                                   value="{{ $delivery->id }}"
-                                                    @checked($loop->first || old('delivery_id') === $delivery->id)
-                                            >
-                                            <label for="delivery-method-address-{{ $delivery->id }}" class="form-radio-label">
-                                                {{ $delivery->title }}
-                                            </label>
-                                        </div>
-
-                                        @if($delivery->with_address)
-                                            <x-forms.text-input
-                                                    name="customer[city]"
-                                                    type="text"
-                                                    placeholder="Город"
-                                                    value="{{ old('customer.city') }}"
-                                                    :isError="$errors->has('customer.city')"
-                                            >
-                                            </x-forms.text-input>
-
-                                            @error('customer.city')
-                                            <x-forms.error>
-                                                {{ $message }}
-                                            </x-forms.error>
-                                            @enderror
-
-                                            <x-forms.text-input
-                                                    name="customer[address]"
-                                                    type="text"
-                                                    placeholder="Адрес"
-                                                    value="{{ old('customer.address') }}"
-                                                    :isError="$errors->has('customer.address')"
-                                            >
-                                            </x-forms.text-input>
-
-                                            @error('customer.address')
-                                            <x-forms.error>
-                                                {{ $message }}
-                                            </x-forms.error>
-                                            @enderror
-                                        @endif
-                                    </div>
-                                @endforeach
+                            </div>
+                            <div class="py-4">
+                                <div class="flex items-center gap-4">
+                                    <a href="{{ route('orders.show', $order->id) }}" class="!h-14 btn btn-purple">Подробнее</a>
+                                    <a href="#" class="w-14 !h-14 !px-0 btn btn-pink" title="Удалить заказ">
+                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                             viewBox="0 0 52 52">
+                                            <path d="M49.327 7.857H2.673a2.592 2.592 0 0 0 0 5.184h5.184v31.102a7.778 7.778 0 0 0 7.776 7.776h20.735a7.778 7.778 0 0 0 7.775-7.776V13.041h5.184a2.592 2.592 0 0 0 0-5.184Zm-25.919 28.51a2.592 2.592 0 0 1-5.184 0V23.409a2.592 2.592 0 1 1 5.184 0v12.96Zm10.368 0a2.592 2.592 0 0 1-5.184 0V23.409a2.592 2.592 0 1 1 5.184 0v12.96ZM20.817 5.265h10.367a2.592 2.592 0 0 0 0-5.184H20.817a2.592 2.592 0 1 0 0 5.184Z"/>
+                                        </svg>
+                                    </a>
+                                </div>
                             </div>
                         </div>
+                    @empty
+                        Заказов нет
+                    @endforelse
 
-                        <!-- Payment-->
-                        <div class="p-6 2xl:p-8 rounded-[20px] bg-card">
-                            <h3 class="mb-6 text-md 2xl:text-lg font-bold">Метод оплаты</h3>
-                            <div class="space-y-5">
-                                @foreach($payments as $payment)
-                                    <div class="form-radio">
-                                        <input type="radio"
-                                               name="payment_method_id"
-                                               id="payment-method-{{ $payment->id }}"
-                                               value="{{ $payment->id }}"
-                                                @checked($loop->first || old('payment_method_id') === $payment->id)
-                                        >
+                    <!-- End order item -->
 
-                                        <label for="payment-method-{{ $payment->id }}" class="form-radio-label">
-                                            {{ $payment->title }}
-                                        </label>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
+                    <!-- Order item -->
+{{--                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between px-4 md:px-6 rounded-xl md:rounded-2xl bg-card">--}}
+{{--                        <div class="py-4">--}}
+{{--                            <div class="flex gap-6">--}}
+{{--                                <div class="shrink-0 overflow-hidden w-[64px] sm:w-[84px] h-[64px] sm:h-[84px] rounded-2xl">--}}
+{{--                                    <img src="../../images/products/6.jpg" class="object-cover w-full h-full"--}}
+{{--                                         alt="Заказ №2499">--}}
+{{--                                </div>--}}
+{{--                                <div class="grow py-2">--}}
+{{--                                    <div class="flex flex-col md:flex-row md:items-center gap-2">--}}
+{{--                                        <h4 class="pr-3 text-md font-bold"><a href="orders-item.html"--}}
+{{--                                                                              class="inline-block text-white hover:text-pink">Заказ--}}
+{{--                                                №2499</a></h4>--}}
+{{--                                        <div class="px-3 py-1 rounded-md bg-purple text-xxs">Выполнено</div>--}}
+{{--                                        <div class="px-3 py-1 rounded-md bg-white/10 text-xxs">12.09.2022</div>--}}
+{{--                                    </div>--}}
+{{--                                    <div class="mt-3 text-body text-xs">На сумму: 45 200 ₽</div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                        <div class="py-4">--}}
+{{--                            <div class="flex items-center gap-4">--}}
+{{--                                <a href="orders-item.html" class="!h-14 btn btn-purple">Подробнее</a>--}}
+{{--                                <a href="#" class="w-14 !h-14 !px-0 btn btn-pink" title="Удалить заказ">--}}
+{{--                                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="currentColor"--}}
+{{--                                         viewBox="0 0 52 52">--}}
+{{--                                        <path d="M49.327 7.857H2.673a2.592 2.592 0 0 0 0 5.184h5.184v31.102a7.778 7.778 0 0 0 7.776 7.776h20.735a7.778 7.778 0 0 0 7.775-7.776V13.041h5.184a2.592 2.592 0 0 0 0-5.184Zm-25.919 28.51a2.592 2.592 0 0 1-5.184 0V23.409a2.592 2.592 0 1 1 5.184 0v12.96Zm10.368 0a2.592 2.592 0 0 1-5.184 0V23.409a2.592 2.592 0 1 1 5.184 0v12.96ZM20.817 5.265h10.367a2.592 2.592 0 0 0 0-5.184H20.817a2.592 2.592 0 1 0 0 5.184Z"/>--}}
+{{--                                    </svg>--}}
+{{--                                </a>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <!-- End order item -->--}}
 
-                    </div>
+{{--                    <!-- Order item -->--}}
+{{--                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between px-4 md:px-6 rounded-xl md:rounded-2xl bg-card">--}}
+{{--                        <div class="py-4">--}}
+{{--                            <div class="flex gap-6">--}}
+{{--                                <div class="shrink-0 overflow-hidden w-[64px] sm:w-[84px] h-[64px] sm:h-[84px] rounded-2xl">--}}
+{{--                                    <img src="../../images/products/9.jpg" class="object-cover w-full h-full"--}}
+{{--                                         alt="Заказ №1902">--}}
+{{--                                </div>--}}
+{{--                                <div class="grow py-2">--}}
+{{--                                    <div class="flex flex-col md:flex-row md:items-center gap-2">--}}
+{{--                                        <h4 class="pr-3 text-md font-bold"><a href="orders-item.html"--}}
+{{--                                                                              class="inline-block text-white hover:text-pink">Заказ--}}
+{{--                                                №1902</a></h4>--}}
+{{--                                        <div class="px-3 py-1 rounded-md bg-pink text-xxs">Отменён</div>--}}
+{{--                                        <div class="px-3 py-1 rounded-md bg-white/10 text-xxs">05.08.2022</div>--}}
+{{--                                    </div>--}}
+{{--                                    <div class="mt-3 text-body text-xs">На сумму: 19 200 ₽</div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                        <div class="py-4">--}}
+{{--                            <div class="flex items-center gap-4">--}}
+{{--                                <a href="orders-item.html" class="!h-14 btn btn-purple">Подробнее</a>--}}
+{{--                                <a href="#" class="w-14 !h-14 !px-0 btn btn-pink" title="Удалить заказ">--}}
+{{--                                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="currentColor"--}}
+{{--                                         viewBox="0 0 52 52">--}}
+{{--                                        <path d="M49.327 7.857H2.673a2.592 2.592 0 0 0 0 5.184h5.184v31.102a7.778 7.778 0 0 0 7.776 7.776h20.735a7.778 7.778 0 0 0 7.775-7.776V13.041h5.184a2.592 2.592 0 0 0 0-5.184Zm-25.919 28.51a2.592 2.592 0 0 1-5.184 0V23.409a2.592 2.592 0 1 1 5.184 0v12.96Zm10.368 0a2.592 2.592 0 0 1-5.184 0V23.409a2.592 2.592 0 1 1 5.184 0v12.96ZM20.817 5.265h10.367a2.592 2.592 0 0 0 0-5.184H20.817a2.592 2.592 0 1 0 0 5.184Z"/>--}}
+{{--                                    </svg>--}}
+{{--                                </a>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+                    <!-- End order item -->
 
-                    <!-- Checkout -->
-                    <div class="p-6 2xl:p-8 rounded-[20px] bg-card">
-                        <h3 class="mb-6 text-md 2xl:text-lg font-bold">Заказ</h3>
-                        <table class="w-full border-spacing-y-3 text-body text-xxs text-left" style="border-collapse: separate">
-                            <thead class="text-[12px] text-body uppercase">
-                            <tr>
-                                <th scope="col" class="pb-2 border-b border-body/60">Товар</th>
-                                <th scope="col" class="px-2 pb-2 border-b border-body/60">К-во</th>
-                                <th scope="col" class="px-2 pb-2 border-b border-body/60">Сумма</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($items as $item)
-                                <tr>
-                                    <td scope="row" class="pb-3 border-b border-body/10">
-                                        <h4 class="font-bold">
-                                            <a href="{{ route('product', $item->product) }}" class="inline-block text-white hover:text-pink break-words pr-3">
-                                                {{ $item->product->title }}
-                                            </a>
-                                        </h4>
-
-                                        @if($item->optionValues->isNotEmpty())
-                                            <ul>
-                                                @foreach($item->optionValues as $value)
-                                                    <li class="text-body">
-                                                        {{ $value->option->title }}: {{ $value->title }}
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        @endif
-                                    </td>
-                                    <td class="px-2 pb-3 border-b border-body/20 whitespace-nowrap">{{ $item->quantity }} шт.</td>
-                                    <td class="px-2 pb-3 border-b border-body/20 whitespace-nowrap">{{ $item->amount }}</td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-
-                        <div class="text-xs font-semibold text-right">Всего: {{ cart()->amount() }}</div>
-
-                        <div class="mt-8 space-y-8">
-                            <!-- Summary -->
-                            <table class="w-full text-left">
-                                <tbody>
-                                <tr>
-                                    <th scope="row" class="text-md 2xl:text-lg font-black">Итого:</th>
-                                    <td class="text-md 2xl:text-lg font-black">{{ cart()->amount() }}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-
-                            <!-- Process to checkout -->
-                            <button type="submit" class="w-full btn btn-pink">Оформить заказ</button>
-                        </div>
-                    </div>
-                </form>
+                </div>
             </section>
+
         </div>
     </main>
 @endsection
